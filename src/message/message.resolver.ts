@@ -50,7 +50,7 @@ export class MessageResolver {
   async resolveReference(
     reference: ChatMessageReference,
   ): Promise<ChatMessage> {
-    return this.chatMessageDataLoader.load(reference.id);
+    return await this.chatMessageDataLoader.load(reference.id);
   }
 
   @Mutation(() => ChatMessage)
