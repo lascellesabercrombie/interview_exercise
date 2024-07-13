@@ -11,6 +11,7 @@ import { MessageDto, GetMessageDto } from './models/message.dto';
 import { ObjectID } from 'mongodb';
 import { createRichContent } from './utils/message.helper';
 import { MessageGroupedByConversationOutput } from '../conversation/models/messagesFilterInput';
+import { Tag } from '../conversation/models/CreateChatConversation.dto';
 
 @Injectable()
 export class MessageData {
@@ -258,6 +259,24 @@ export class MessageData {
     }
 
     return this.getMessage(messageId.toHexString());
+  }
+
+  async updateTagsMessage(
+    tags: Tag[],
+    messageId: ObjectID,
+  ): Promise<ChatMessage> {
+    const filterBy = { _id: messageId };
+    const updateProperty = { tags };
+    const updatedResult = await this.chatMessageModel.findOneAndUpdate(
+      filterBy,
+      updateProperty,
+      {
+        new: true,
+      },
+    );
+    if (!updatedResult) throw new Error('Could not update tags on message');
+
+    return chatMessageToObject(updatedResult);
   }
 
   async getMessages(ids: ObjectID[]): Promise<ChatMessage[]> {
