@@ -3,6 +3,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ObjectID } from 'mongodb';
 import { MessageData } from './message.data';
 import { ChatMessageModel, ChatMessageSchema } from './models/message.model';
+import { Tag } from '../conversation/models/CreateChatConversation.dto';
+import { TagType } from '../conversation/models/CreateChatConversation.dto';
 
 import { ConfigManagerModule } from '../configuration/configuration-manager.module';
 import {getTestConfiguration}  from '../configuration/configuration-manager.utils';
@@ -122,6 +124,30 @@ describe('MessageData', () => {
       // And that is it now deleted
       const deletedMessage = await messageData.delete(new ObjectID(message.id));
       expect(deletedMessage.deleted).toEqual(true);
+    });
+  });
+
+  describe('tag', () => {
+    it('successfully updates tags on a message', async () => {
+      const conversationId = new ObjectID();
+      const message = await messageData.create(
+        { conversationId, text: 'Message to tag' },
+        senderId,
+      );
+      const tag1 = new Tag();
+      tag1.id = 'tag1';
+      tag1.type = TagType.subTopic;
+      const tag2 = new Tag();
+      tag2.id = 'tag2';
+      tag2.type = TagType.subTopic;
+      const tags = [tag1, tag2];
+      expect(message.tags).toEqual([]);
+
+      const updatedMessage = await messageData.updateTagsMessage(
+        tags,
+        message.id,
+      );
+      expect(updatedMessage.tags).toEqual(tags);
     });
   });
 });

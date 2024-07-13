@@ -12,6 +12,7 @@ import {
   LikeMessageDto,
   ReactionDto,
   PollDto,
+  UpdateTagsMessageDto,
 } from './models/message.dto';
 import { ObjectID } from 'mongodb';
 import { IAuthenticatedUser } from '../authentication/jwt.strategy';
@@ -25,6 +26,8 @@ import {
   MessagesFilterInput,
   MessageGroupedByConversationOutput,
 } from '../conversation/models/messagesFilterInput';
+import { Tag } from '../conversation/models/CreateChatConversation.dto';
+import { TagType } from '../conversation/models/CreateChatConversation.dto';
 
 const conversationId = new ObjectID('5fe0cce861c8ea54018385af');
 const messageId = new ObjectID('5fe0cce861c8ea54018386ab');
@@ -185,6 +188,13 @@ describe('MessageResolver', () => {
 
     removeReactionFromMessage(
       reactionDto: ReactionDto,
+      authenticatedUser?: IAuthenticatedUser,
+    ): Promise<ChatMessage> {
+      return Promise.resolve(chatMessage);
+    }
+
+    updateTagsMessage(
+      updateTagsMessageDto: UpdateTagsMessageDto,
       authenticatedUser?: IAuthenticatedUser,
     ): Promise<ChatMessage> {
       return Promise.resolve(chatMessage);
@@ -516,6 +526,31 @@ describe('MessageResolver', () => {
           userId,
         },
       );
+    });
+  });
+
+  describe('tag a message', () => {
+    it('should update tags for a message', async () => {
+      const tag1 = new Tag();
+      tag1.id = 'tag1';
+      tag1.type = TagType.subTopic;
+      const tag2 = new Tag();
+      tag2.id = 'tag2';
+      tag2.type = TagType.subTopic;
+      const tags = [tag1, tag2];
+
+      jest.spyOn(messageLogic, 'updateTagsMessage');
+      const message: UpdateTagsMessageDto = {
+        tags,
+        messageId,
+        conversationId,
+        userId,
+      };
+      resolver.updateTagsMessage(message, authenticatedUser);
+      expect(messageLogic.updateTagsMessage).toBeCalledWith(message, {
+        accountRole: 'admin',
+        userId,
+      });
     });
   });
 
