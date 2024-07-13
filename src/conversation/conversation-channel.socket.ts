@@ -7,6 +7,7 @@ import {
 import { SocketChatMessage } from '../message/models/message.entity';
 import { ObjectId } from 'mongodb';
 import { User } from '../user/models/user.model';
+import { Tag } from './models/CreateChatConversation.dto';
 
 export class SendMessageEvent implements BaseEventType {
   public name = 'send-message';
@@ -23,6 +24,10 @@ export class LikeMessageEvent implements BaseEventType {
 export class UnlikeMessageEvent implements BaseEventType {
   public name = 'unlike-message';
   constructor(public message: { userId: ObjectId; messageId: ObjectId }) {}
+}
+export class UpdateTagsMessageEvent implements BaseEventType {
+  public name = 'update-tags-message';
+  constructor(public message: { tags: Tag[]; messageId: ObjectId }) {}
 }
 
 export class ReactedMessageEvent implements BaseEventType {
@@ -84,6 +89,7 @@ type EventType =
   | DeleteMessageEvent
   | LikeMessageEvent
   | UnlikeMessageEvent
+  | UpdateTagsMessageEvent
   | PinMessageEvent
   | UnpinMessageEvent
   | UserLeftConversationEvent
