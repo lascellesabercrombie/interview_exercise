@@ -145,5 +145,35 @@ describe('MessageData', () => {
       expect(updatedMessage?.tags?.[0]?.id).toEqual('tag1');
       expect(updatedMessage?.tags?.[1]?.id).toEqual('tag2');
     });
+    it('gets messages by tag ID', async () => {
+      const conversationId = new ObjectID();
+      const message1 = await messageData.create(
+        { conversationId, text: 'First message to tag' },
+        senderId,
+      );
+      const message2 = await messageData.create(
+        { conversationId, text: 'Second message to tag' },
+        senderId,
+      );
+      const tag1 = new Tag();
+      tag1.id = 'tag1';
+      tag1.type = TagType.subTopic;
+      const tag2 = new Tag();
+      tag2.id = 'tag2';
+      tag2.type = TagType.subTopic;
+      const tag3 = new Tag();
+      tag3.id = 'tag3';
+      tag3.type = TagType.subTopic;
+      const tags = [tag1, tag2];
+
+      await messageData.updateTagsMessage(tags, message1.id);
+      await messageData.updateTagsMessage([tag1], message2.id);
+      const taggedWithTag1 = await messageData.getMessagesByTag(tag1.id);
+      const taggedWithTag2 = await messageData.getMessagesByTag(tag2.id);
+      const taggedWithTag3 = await messageData.getMessagesByTag(tag3.id);
+      expect(taggedWithTag1).toHaveLength(2);
+      expect(taggedWithTag2).toHaveLength(1);
+      expect(taggedWithTag3).toHaveLength(0);
+    });
   });
 });
