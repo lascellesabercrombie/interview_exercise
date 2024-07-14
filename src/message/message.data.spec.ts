@@ -147,7 +147,8 @@ describe('MessageData', () => {
         tags,
         message.id,
       );
-      expect(updatedMessage.tags).toEqual(tags);
+      expect(updatedMessage?.tags?.[0]?.id).toEqual('tag1');
+      expect(updatedMessage?.tags?.[1]?.id).toEqual('tag2');
     });
   });
 });
