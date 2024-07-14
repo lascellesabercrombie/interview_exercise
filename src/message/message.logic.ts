@@ -520,6 +520,10 @@ export class MessageLogic implements IMessageLogic {
     return message;
   }
 
+  async getMessagesByTagId(tag_id: Tag['id']) {
+    return await this.messageData.getMessagesByTag(tag_id);
+  }
+
   private async throwForbiddenErrorIfNotAuthorized(
     authenticatedUser: IAuthenticatedUser,
     messageId: ObjectID,
