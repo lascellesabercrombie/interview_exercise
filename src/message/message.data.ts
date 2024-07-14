@@ -327,9 +327,9 @@ export class MessageData {
     return groupedChatMessages;
   }
 
-  async getMessagesByTag(tag_id: Tag['id']): Promise<ChatMessage[]> {
+  async getMessagesByTag(tagId: Tag['id']): Promise<ChatMessage[]> {
     const chatMessages = await this.chatMessageModel.find({
-      'tags.id': tag_id,
+      'tags.id': tagId,
     });
     return chatMessages.map((chatMessage) => chatMessageToObject(chatMessage));
   }

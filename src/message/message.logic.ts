@@ -520,8 +520,8 @@ export class MessageLogic implements IMessageLogic {
     return message;
   }
 
-  async getMessagesByTagId(tag_id: Tag['id']) {
-    return await this.messageData.getMessagesByTag(tag_id);
+  async getMessagesByTagId(tagId: Tag['id']) {
+    return await this.messageData.getMessagesByTag(tagId);
   }
 
   private async throwForbiddenErrorIfNotAuthorized(
