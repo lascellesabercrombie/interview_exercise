@@ -181,7 +181,7 @@ export class ReactionDto {
 
 @InputType()
 export class UpdateTagsMessageDto {
-  @Field(() => [ObjectID])
+  @Field(() => [Tag])
   tags: Tag[];
 
   @Field(() => ObjectID)

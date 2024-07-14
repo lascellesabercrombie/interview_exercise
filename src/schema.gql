@@ -23,6 +23,15 @@ enum ContextType {
   isNewsFeedConversation
 }
 
+type Tag {
+  id: String!
+  type: TagType!
+}
+
+enum TagType {
+  subTopic
+}
+
 type Reaction {
   reaction: String!
   reactionUnicode: String!
@@ -98,7 +107,7 @@ type ChatMessage {
   likesCount: Int!
   richContent: RichMessageContent
   reactions: [Reaction!]
-  tags: [ObjectId!]
+  tags: [Tag!]
   isSenderBlocked: Boolean
 }
 
@@ -132,6 +141,11 @@ type ConversationInbox {
   """
   contexts: [Context!]!
   conversations: [ChatConversation!]!
+}
+
+input TagInput {
+  id: String!
+  type: TagType!
 }
 
 type Query {
@@ -251,7 +265,7 @@ input ReactionDto {
 }
 
 input UpdateTagsMessageDto {
-  tags: [ObjectId!]!
+  tags: [TagInput!]!
   userId: ObjectId!
   messageId: ObjectId!
   conversationId: ObjectId!

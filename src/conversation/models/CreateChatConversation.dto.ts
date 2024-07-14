@@ -1,15 +1,25 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Permission } from './Permission.dto';
 import { Product, Context } from './ContextSchema.dto';
+import { ObjectType, InputType, registerEnumType } from '@nestjs/graphql';
+import { Field } from '@nestjs/graphql';
 
 export enum TagType {
   subTopic = 'subTopic',
 }
 
+registerEnumType(TagType, {
+  name: 'TagType',
+});
+
+@ObjectType()
+@InputType('TagInput')
 export class Tag {
+  @Field()
   @ApiProperty({ type: String })
   id: string;
 
+  @Field(() => TagType)
   @ApiProperty({ enum: TagType })
   type: TagType;
 }

@@ -147,7 +147,7 @@ export class ChatMessage {
   @Field(() => [Reaction], { nullable: true })
   reactions?: Reaction[];
 
-  @Field(() => [ObjectID])
+  @Field(() => [Tag])
   tags?: Tag[];
 
   @Field({ defaultValue: false, nullable: true })
